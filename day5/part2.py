@@ -35,15 +35,14 @@ def main():
 
     for input in inputs:
         ans = correct(input, rules)
-        if ans:
+        if not ans:
+            sort(input, rules)
             output += input[len(input) // 2]
 
     print(output)
 
-
 def correct(input, rules):
     seen = set()
-    ans = True
     incorrect = []
 
     for i in range(len(input)):
@@ -54,8 +53,24 @@ def correct(input, rules):
                     incorrect.append((num, i))
         seen.add(num)
 
-    print(incorrect)
     return len(incorrect) == 0
+
+def sort(input, rules):
+    i = 0
+    while i < len(input):
+        good = True
+        for j in range(i+1, len(input)):
+            if greater(input[i], input[j], rules):
+                input[i], input[j] = input[j], input[i]
+                good = False
+        if good:
+            i += 1
+    return
+
+def greater(num1, num2, rules):
+    if num1 in rules and num2 in rules[num1]:
+        return False
+    return True
     
 def get_input(file_name):
     rule_lines = []
